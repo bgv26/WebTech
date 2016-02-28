@@ -1,10 +1,10 @@
 #! /usr/bin/python
-from urlparse import parse_qsl
+from urlparse import parse_qs
 
 def app(env, start_response):
    start_response('200 OK', [('Content-Type', 'text/plain')])
    returnString = ''
-   for qsi in parse_qsl(env['QUERY_STRING'], keep_blank_values=True):
-      returnString += qsi[0] + '=' + qsi[1] + '\n'
+   for (key,value) in parse_qs(env['QUERY_STRING'], keep_blank_values=True).iteritems():
+      returnString += key + '=' + value + '\n'
    return returnString
    
