@@ -1,3 +1,4 @@
+#! /usr/bin/python
 from urlparse import parse_qsl
 
 def app(env, start_response):
@@ -6,3 +7,4 @@ def app(env, start_response):
    for qsi in parse_qsl(env[QUERY_STRING], keep_blank_values=True):
       returnString += qsi + '\n'
    return returnString
+   
