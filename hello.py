@@ -5,6 +5,6 @@ def app(env, start_response):
    start_response('200 OK', [('Content-Type', 'plain/text')])
    returnString = ''
    for qsi in parse_qsl(env['QUERY_STRING'], keep_blank_values=True):
-      returnString += qsi + '\n'
+      returnString += qsi[0] + '=' + qsi[1] + '\n'
    return returnString
    
