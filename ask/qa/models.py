@@ -9,7 +9,7 @@ class Question(models.Model):
     added_at = models.DateTimeField()
     rating = models.IntegerField(blank=True)
     author = models.ForeignKey(User, blank=True)
-    likes = models.ForeignKey(User, blank=True)
+    likes = models.CharField(blank=True)
 
     def __unicode__(self):
         return self.title
