@@ -14,7 +14,7 @@ def index(request):
         page = int(request.GET.get('page', 1))
     except ValueError:
         raise Http404
-    questions = Question.objects.order('-added_at')
+    questions = Question.objects.order_by('-added_at')
     paginator = Paginator(questions, 10)
     paginator.baseURL = "/?page="
     page = paginator.page(page)
@@ -30,7 +30,7 @@ def popular(request):
         page = int(request.GET.get('page', 1))
     except ValueError:
         raise Http404
-    questions = Question.objects.order('-rating')
+    questions = Question.objects.order_by('-rating')
     paginator = Paginator(questions, 10)
     paginator.baseURL = "/popular/?page="
     page = paginator.page(page)
