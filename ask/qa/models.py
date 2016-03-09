@@ -8,7 +8,7 @@ class Question(models.Model):
     text = models.TextField()
     added_at = models.DateTimeField()
     rating = models.IntegerField(blank=True)
-    author = User(blank=True)
+    author = models.ForeignKey(User, blank=True)
     likes = models.ForeignKey(User, blank=True)
 
     def __unicode__(self):
@@ -21,7 +21,7 @@ class Answer(models.Model):
     text = models.TextField()
     added_at = models.DateTimeField()
     question = models.ForeignKey(Question)
-    author = User(blank=True)
+    author = models.ForeignKey(User, blank=True)
 
     def __unicode__(self):
         return self.question
