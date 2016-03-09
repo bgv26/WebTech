@@ -2,7 +2,7 @@
 {% block content %}
 <h2>{{ question.title }}</h2>
 <p>{{ question.text }}</p>
-{% for answer in question.answer_set %}
+{% for answer in question.answer_set.all %}
 <p>{{ answer.text }}</p>
 {% endfor %}
 {% endblock %}
