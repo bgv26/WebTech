@@ -49,10 +49,10 @@ def popular(request):
 def question(request, quest_id):
     quest = get_object_or_404(Question, id=quest_id)
     if request.method == 'POST':
-        return answer(request, quest)
-        # form = AnswerForm(request.POST)
-        # if form.is_valid():
-        #     post = form.save()
+        # return answer(request, quest)
+        form = AnswerForm(request.POST)
+        if form.is_valid():
+            post = form.save()
     else:
         form = AnswerForm()
     return render(request, "question_detail.html", {'question': quest, 'form': form})
