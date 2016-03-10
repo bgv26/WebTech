@@ -63,6 +63,7 @@ def ask(request):
         form = AskForm(request.POST)
         if form.is_valid():
             post = form.save()
+            print post.get_url()
             return HttpResponseRedirect(post.get_url())
     else:
         form = AskForm()
