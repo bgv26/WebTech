@@ -46,10 +46,12 @@ def popular(request):
     })
 
 
-@require_GET
 def question(request, id):
-    quest = get_object_or_404(Question, id=id)
-    form = AnswerForm()
+    if request.method == 'POST':
+        return answer(request)
+    else:
+        quest = get_object_or_404(Question, id=id)
+        form = AnswerForm()
     return render(request, "question_detail.html", {'question': quest, 'form': form})
 
 
