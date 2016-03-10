@@ -46,8 +46,8 @@ def popular(request):
     })
 
 
-def question(request, quest_id):
-    quest = get_object_or_404(Question, id=quest_id)
+def question(request, id):
+    quest = get_object_or_404(Question, id=id)
     if request.method == 'POST':
         # return answer(request, quest)
         form = AnswerForm(request.POST)
