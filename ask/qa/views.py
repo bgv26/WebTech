@@ -1,13 +1,16 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.core.paginator import Paginator
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_GET, require_POST
 from models import Question
+from forms import AskForm, AnswerForm
+
 
 # Create your views here.
 def test(request, *args, **kwargs):
     return HttpResponse('OK')
+
 
 @require_GET
 def index(request):
@@ -25,6 +28,7 @@ def index(request):
         'page': page,
     })
 
+
 @require_GET
 def popular(request):
     try:
@@ -41,9 +45,29 @@ def popular(request):
         'page': page,
     })
 
+
 @require_GET
 def question(request, id):
-    question = get_object_or_404(Question, id=id)
-    return render_to_response("question_detail.html", {"question": question})
+    quest = get_object_or_404(Question, id=id)
+    form = AnswerForm()
+    return render_to_response("question_detail.html", {'question': quest, 'form': form})
 
 
+def ask(request):
+    if request.method == 'POST':
+        form = AskForm(request.POST)
+        if form.is_valid():
+            post = form.save()
+            return HttpResponseRedirect(post.get_url())
+    else:
+        form = AskForm()
+    return render_to_response('ask.html', {'form': form})
+
+
+@require_POST
+def answer(request):
+    if request.method == 'POST':
+        form = AnswerForm(request.POST)
+        if form.is_valid():
+            post = form.save()
+            return HttpResponseRedirect(post.get_url())
