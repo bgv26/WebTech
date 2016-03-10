@@ -54,7 +54,7 @@ def question(request, id):
 
 
 def ask(request):
-    if request.method == 'POST':
+    if request.method == 'post':
         form = AskForm(request.POST)
         if form.is_valid():
             post = form.save()
@@ -66,7 +66,7 @@ def ask(request):
 
 @require_POST
 def answer(request):
-    if request.method == 'POST':
+    if request.method == 'post':
         form = AnswerForm(request.POST)
         if form.is_valid():
             post = form.save()
