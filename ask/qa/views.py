@@ -1,4 +1,5 @@
 from django.shortcuts import render_to_response, get_object_or_404
+from django.core.urlresolvers import reverse
 from django.http import HttpResponse, Http404
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_GET
@@ -16,7 +17,7 @@ def index(request):
         raise Http404
     questions = Question.objects.order_by('-added_at')
     paginator = Paginator(questions, 10)
-    paginator.baseURL = "/?page="
+    paginator.baseURL = reverse('index') + "?page="
     page = paginator.page(page)
     return render_to_response('questions_list.html', {
         'questions': page.object_list,
@@ -32,7 +33,7 @@ def popular(request):
         raise Http404
     questions = Question.objects.order_by('-rating')
     paginator = Paginator(questions, 10)
-    paginator.baseURL = "/popular/?page="
+    paginator.baseURL = reverse('popular') + "?page="
     page = paginator.page(page)
     return render_to_response('questions_list.html', {
         'questions': page.object_list,
