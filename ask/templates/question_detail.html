@@ -5,7 +5,7 @@
 {% for answer in question.answer_set.all %}
 <p>{{ answer }}</p>
 {% endfor %}
-<form method="post" action="{% url 'answer' %}">
+<form method="post" action="{% url 'question' question.id %}">
     {% csrf_token %}
     <fieldset>
         <label>{{ form.text.label }}</label>

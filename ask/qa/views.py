@@ -46,11 +46,14 @@ def popular(request):
     })
 
 
-def question(request, id):
+def question(request, quest_id):
+    quest = get_object_or_404(Question, id=quest_id)
     if request.method == 'POST':
-        return answer(request)
+        # return answer(request, quest)
+        form = AnswerForm(request.POST)
+        if form.is_valid():
+            post = form.save()
     else:
-        quest = get_object_or_404(Question, id=id)
         form = AnswerForm()
     return render(request, "question_detail.html", {'question': quest, 'form': form})
 
@@ -67,9 +70,9 @@ def ask(request):
 
 
 @require_POST
-def answer(request):
+def answer(request, quest):
     if request.method == 'POST':
         form = AnswerForm(request.POST)
         if form.is_valid():
-            post, quest = form.save()
+            post = form.save()
             return HttpResponseRedirect(quest.get_url())

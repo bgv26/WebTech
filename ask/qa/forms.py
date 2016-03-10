@@ -45,4 +45,4 @@ class AnswerForm(forms.Form):
         self.cleaned_data['question'] = Question.objects.get(id=self.cleaned_data['question'])
         answer = Answer(**self.cleaned_data)
         answer.save()
-        return (answer, self.cleaned_data['question'])
+        return answer
