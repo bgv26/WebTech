@@ -46,8 +46,8 @@ def popular(request):
     })
 
 
-def question(request, id):
-    quest = get_object_or_404(Question, id=id)
+def question(request, quest_id):
+    quest = get_object_or_404(Question, id=quest_id)
     if request.method == 'POST':
         # return answer(request, quest)
         form = AnswerForm(request.POST)
@@ -63,7 +63,6 @@ def ask(request):
         form = AskForm(request.POST)
         if form.is_valid():
             post = form.save()
-            print post.get_url()
             return HttpResponseRedirect(post.get_url())
     else:
         form = AskForm()
