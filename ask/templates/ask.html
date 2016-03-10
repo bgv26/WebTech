@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
 <form method="post" action="{% url 'ask' %}">
+    {% csrf_token %}
     <fieldset>
-        {% csrf_token %}
         {% for field in form %}
         <label>{{ field.label }}</label>
         <div>{{ field }}</div>
