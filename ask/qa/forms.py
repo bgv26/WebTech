@@ -27,13 +27,13 @@ class AskForm(forms.Form):
 
 class AnswerForm(forms.Form):
     text = forms.CharField(widget=forms.Textarea)
-    question = forms.ChoiceField(choices=Question.objects.values_list('id', 'title').all())
+    question = forms.IntegerField()
 
-    def clean_question(self):
-        question = self.cleaned_data['question']
-        if question is None:
-            raise forms.ValidationError(u'Выберите вопрос')
-        return question
+    # def clean_question(self):
+    #     question = self.cleaned_data['question']
+    #     if question is None:
+    #         raise forms.ValidationError(u'Выберите вопрос')
+    #     return question
 
     def clean_text(self):
         text = self.cleaned_data['text']
@@ -42,6 +42,7 @@ class AnswerForm(forms.Form):
         return text
 
     def save(self):
+        self.cleaned_data['question'] = Question.objects.get(id=self.cleaned_data['question'])
         answer = Answer(**self.cleaned_data)
         answer.save()
-        return answer
+        return (answer, self.cleaned_data['question'])

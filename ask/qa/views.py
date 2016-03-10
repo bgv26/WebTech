@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404, render
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.core.paginator import Paginator
@@ -50,24 +50,24 @@ def popular(request):
 def question(request, id):
     quest = get_object_or_404(Question, id=id)
     form = AnswerForm()
-    return render_to_response("question_detail.html", {'question': quest, 'form': form})
+    return render(request, "question_detail.html", {'question': quest, 'form': form})
 
 
 def ask(request):
-    if request.method == 'post':
+    if request.method == 'POST':
         form = AskForm(request.POST)
         if form.is_valid():
             post = form.save()
             return HttpResponseRedirect(post.get_url())
     else:
         form = AskForm()
-    return render_to_response('ask.html', {'form': form})
+    return render(request, 'ask.html', {'form': form})
 
 
 @require_POST
 def answer(request):
-    if request.method == 'post':
+    if request.method == 'POST':
         form = AnswerForm(request.POST)
         if form.is_valid():
-            post = form.save()
-            return HttpResponseRedirect(post.get_url())
+            post, quest = form.save()
+            return HttpResponseRedirect(quest.get_url())

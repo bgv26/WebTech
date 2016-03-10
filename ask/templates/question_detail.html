@@ -5,13 +5,12 @@
 {% for answer in question.answer_set.all %}
 <p>{{ answer }}</p>
 {% endfor %}
-<form method="post" action="{% url answer %}">
+<form method="post" action="{% url 'answer' %}">
+    {% csrf_token %}
     <fieldset>
-        {% csrf_token %}
-        {% for field in form %}
-        <label>{{ field.label }}</label>
-        <div>{{ field }}</div>
-        {% endfor %}
+        <label>{{ form.text.label }}</label>
+        <div>{{ form.text }}</div>
+        <input type="hidden" name="question" value="{{ question.id }}">
     </fieldset>
     <button type="submit">Сохранить</button>
 </form>
