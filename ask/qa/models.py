@@ -15,7 +15,7 @@ class Question(models.Model):
         return self.title
 
     def get_url(self):
-        return reverse('question', kwargs={'id': self.pk})
+        return reverse('question', kwargs={'id': self.id})
 
 class Answer(models.Model):
     text = models.TextField()
@@ -24,4 +24,4 @@ class Answer(models.Model):
     author = models.ForeignKey(User, blank=True)
 
     def __unicode__(self):
-        return self.question
+        return self.text

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 {% for question in questions %}
-    <a href="{{ question.get_url }}" title="{{ question.title }}">{{ question.title }}</a>
+    <a href="{{ question.get_url }}" title="{{ question }}">{{ question }}</a>
 {% endfor %}
 <nav>
     <ul>
