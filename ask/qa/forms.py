@@ -11,8 +11,10 @@ class AskForm(forms.Form):
     author = forms.IntegerField(widget=forms.HiddenInput, required=False)
 
     def set_author(self, user):
-        if user.is_authenticated():
-            self.author = user
+        if user is not None:
+            user = User.objects.get(id=user)
+            if user.is_authenticated():
+                self.author = user
         else:
             self.author = None
 
@@ -43,8 +45,10 @@ class AnswerForm(forms.Form):
     author = forms.IntegerField(widget=forms.HiddenInput, required=False)
 
     def set_author(self, user):
-        if user.is_authenticated():
-            self.author = user
+        if user is not None:
+            user = User.objects.get(id=user)
+            if user.is_authenticated():
+                self.author = user
         else:
             self.author = None
 
