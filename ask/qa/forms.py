@@ -1,11 +1,23 @@
 # -*- coding: utf-8 -*-
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 from django import forms
-from models import *
+from models import Question, Answer
 
 
 class AskForm(forms.Form):
     title = forms.CharField(max_length=255)
     text = forms.CharField(widget=forms.Textarea)
+    author = forms.IntegerField(widget=forms.HiddenInput, required=False)
+
+    def set_author(self, user):
+        if user.is_authenticated():
+            self.author = user
+        else:
+            self.author = None
+
+    def clean_author(self):
+        return self.author
 
     def clean_title(self):
         title = self.cleaned_data['title']
@@ -27,7 +39,21 @@ class AskForm(forms.Form):
 
 class AnswerForm(forms.Form):
     text = forms.CharField(widget=forms.Textarea)
-    question = forms.IntegerField()
+    question = forms.IntegerField(widget=forms.HiddenInput)
+    author = forms.IntegerField(widget=forms.HiddenInput, required=False)
+
+    def set_author(self, user):
+        if user.is_authenticated():
+            self.author = user
+        else:
+            self.author = None
+
+    def clean_author(self):
+        return self.author
+
+    def get_user(self, user):
+        if user.is_authenticated():
+            self.cleaned_data['author'] = user
 
     def clean_question(self):
         question = Question.objects.get(id=self.cleaned_data['question'])
@@ -45,3 +71,23 @@ class AnswerForm(forms.Form):
         answer = Answer(**self.cleaned_data)
         answer.save()
         return answer
+
+
+class SignUpForm(forms.Form):
+    username = forms.CharField(max_length=15)
+    email = forms.EmailField()
+    password = forms.CharField(widget=forms.PasswordInput)
+
+    def save(self):
+        user = User.objects.create_user(**self.cleaned_data)
+        user = authenticate(usename=user.username, password=user.password)
+        return user
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=15)
+    password = forms.CharField(widget=forms.PasswordInput)
+
+    def login(self):
+        user = authenticate(**self.cleaned_data)
+        return user

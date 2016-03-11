@@ -3,8 +3,8 @@ from views import *
 
 urlpatterns = patterns('',
     url(r'^$', index, name='index'),
-    url(r'^login/$', test),
-    url(r'^signup/$', test),
+    url(r'^login/$', enter, name='login'),
+    url(r'^signup/$', signup, name='signup'),
     url(r'^question/(?P<quest_id>\d+)/$', question, name='question'),
     url(r'^ask/', ask, name='ask'),
     url(r'^popular/$', popular, name='popular'),

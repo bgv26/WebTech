@@ -3,11 +3,13 @@
 <form method="post" action="{% url 'ask' %}">
     {% csrf_token %}
     <fieldset>
-        {% for field in form %}
-        <p>{{ field.errors }}</p>
-        <label>{{ field.label }}</label>
-        <div>{{ field }}</div>
-        {% endfor %}
+        <p>{{ form.title.errors }}</p>
+        <label>{{ form.title.label }}</label>
+        <div>{{ form.title }}</div>
+        <p>{{ form.text.errors }}</p>
+        <label>{{ form.text.label }}</label>
+        <div>{{ form.text }}</div>
+        {{ form.author }}
     </fieldset>
     <button type="submit">Сохранить</button>
 </form>

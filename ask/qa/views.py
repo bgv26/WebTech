@@ -3,8 +3,9 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_GET, require_POST
+from django.contrib.auth import login
 from models import Question
-from forms import AskForm, AnswerForm
+from forms import AskForm, AnswerForm, SignUpForm, LoginForm
 
 
 # Create your views here.
@@ -49,8 +50,8 @@ def popular(request):
 def question(request, quest_id):
     quest = get_object_or_404(Question, id=quest_id)
     if request.method == 'POST':
-        # return answer(request, quest)
         form = AnswerForm(request.POST)
+        form.set_author(request.user)
         if form.is_valid():
             post = form.save()
     else:
@@ -61,6 +62,7 @@ def question(request, quest_id):
 def ask(request):
     if request.method == 'POST':
         form = AskForm(request.POST)
+        form.set_author(request.user)
         if form.is_valid():
             post = form.save()
             return HttpResponseRedirect(post.get_url())
@@ -73,6 +75,33 @@ def ask(request):
 def answer(request, quest):
     if request.method == 'POST':
         form = AnswerForm(request.POST)
+        form._user = request.user
         if form.is_valid():
             post = form.save()
             return HttpResponseRedirect(quest.get_url())
+
+
+def signup(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            if user is not None:
+                login(request, user)
+            return HttpResponseRedirect(reverse('index'))
+    else:
+        form = SignUpForm()
+    return render(request, 'signup.html', {'form': form})
+
+
+def enter(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            user = form.login()
+            if user is not None:
+                login(request, user)
+            return HttpResponseRedirect(reverse('index'))
+    else:
+        form = LoginForm()
+    return render(request, 'login.html', {'form': form})
