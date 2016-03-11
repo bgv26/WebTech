@@ -80,7 +80,10 @@ class SignUpForm(forms.Form):
 
     def save(self):
         user = User.objects.create_user(**self.cleaned_data)
-        user = authenticate(usename=user.username, password=user.password)
+        user = authenticate(
+                username=self.cleaned_data['username'],
+                password=self.cleaned_data['password']
+        )
         return user
 
 

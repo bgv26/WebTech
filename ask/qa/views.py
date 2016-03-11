@@ -88,7 +88,7 @@ def signup(request):
             user = form.save()
             if user is not None:
                 login(request, user)
-            return HttpResponseRedirect(reverse('index'))
+                return HttpResponseRedirect(reverse('index'))
     else:
         form = SignUpForm()
     return render(request, 'signup.html', {'form': form})
@@ -101,7 +101,7 @@ def enter(request):
             user = form.login()
             if user is not None:
                 login(request, user)
-            return HttpResponseRedirect(reverse('index'))
+                return HttpResponseRedirect(reverse('index'))
     else:
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
