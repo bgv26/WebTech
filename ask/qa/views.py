@@ -53,7 +53,7 @@ def question(request, quest_id):
         form = AnswerForm(request.POST)
         form.set_author(request.user)
         if form.is_valid():
-            post = form.save()
+            form.save()
     else:
         form = AnswerForm()
     return render(request, "question_detail.html", {'question': quest, 'form': form})
@@ -77,7 +77,7 @@ def answer(request, quest):
         form = AnswerForm(request.POST)
         form._user = request.user
         if form.is_valid():
-            post = form.save()
+            form.save()
             return HttpResponseRedirect(quest.get_url())
 
 
@@ -89,15 +89,6 @@ def signup(request):
             needs_login = login(request)
             if needs_login:
                 return needs_login
-            # username = request.POST['username']
-            # password = request.POST['password']
-            # user = auth.authenticate(
-            #     username=username,
-            #     password=password
-            # )
-            # if user is not None:
-            #     auth.login(request, user)
-            #     return HttpResponseRedirect(reverse('index'))
     else:
         form = SignUpForm()
     return render(request, 'signup.html', {'form': form})
