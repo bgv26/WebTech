@@ -51,7 +51,7 @@ def question(request, quest_id):
     quest = get_object_or_404(Question, id=quest_id)
     if request.method == 'POST':
         form = AnswerForm(request.POST)
-        form.set_author(request.session.get('user_id'))
+        form.set_author(request.user)
         if form.is_valid():
             post = form.save()
     else:
@@ -62,7 +62,7 @@ def question(request, quest_id):
 def ask(request):
     if request.method == 'POST':
         form = AskForm(request.POST)
-        form.set_author(request.session.get('user_id'))
+        form.set_author(request.user)
         if form.is_valid():
             post = form.save()
             return HttpResponseRedirect(post.get_url())
@@ -86,10 +86,9 @@ def signup(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
-            if user is not None:
-                login(request, user)
-                request.session['user_id'] = user.id
-                return HttpResponseRedirect(reverse('index'))
+            user.backend = 'django.contrib.auth.backends.ModelBackend'
+            login(request, user)
+            return HttpResponseRedirect(reverse('index'))
     else:
         form = SignUpForm()
     return render(request, 'signup.html', {'form': form})
