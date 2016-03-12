@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
 from django import forms
 from models import Question, Answer
 
@@ -76,15 +75,19 @@ class AnswerForm(forms.Form):
 class SignUpForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
 
+    def save(self, commit=True):
+        user = User.objects.create_user(**self.cleaned_data)
+        return user
+
     class Meta:
         model = User
         fields = ['username', 'email', 'password']
 
 
-class LoginForm(forms.Form):
-    username = forms.CharField(max_length=15)
-    password = forms.CharField(widget=forms.PasswordInput)
-
-    def login(self):
-        user = authenticate(**self.cleaned_data)
-        return user
+# class LoginForm(forms.Form):
+#     username = forms.CharField(max_length=15)
+#     password = forms.CharField(widget=forms.PasswordInput)
+#
+#     def login(self):
+#         user = authenticate(**self.cleaned_data)
+#         return user

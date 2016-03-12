@@ -1,13 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
+{{ error }}
 <form method="post" action="{% url 'login' %}">
     {% csrf_token %}
     <fieldset>
-        {% for field in form %}
-        <p>{{ field.errors }}</p>
-        <label>{{ field.label }}</label>
-        <div>{{ field }}</div>
-        {% endfor %}
+        <label>Username</label>
+        <div>
+            <input id="id_username" maxlength="30" name="username" type="text">
+        </div>
+        <label>Password</label>
+        <div>
+            <input id="id_password" name="password" type="password">
+        </div>
     </fieldset>
     <button type="submit">Вход</button>
 </form>

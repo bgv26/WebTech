@@ -3,9 +3,9 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_GET, require_POST
-from django.contrib.auth import login
+from django.contrib.auth import authenticate, login
 from models import Question
-from forms import AskForm, AnswerForm, SignUpForm, LoginForm
+from forms import AskForm, AnswerForm, SignUpForm
 
 
 # Create your views here.
@@ -83,25 +83,35 @@ def answer(request, quest):
 
 def signup(request):
     if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
-            user.backend = 'django.contrib.auth.backends.ModelBackend'
-            login(request, user)
-            return HttpResponseRedirect(reverse('index'))
+            user = authenticate(
+                username=username,
+                password=password
+            )
+            if user is not None:
+                login(request, user)
+                return HttpResponseRedirect(reverse('index'))
     else:
         form = SignUpForm()
     return render(request, 'signup.html', {'form': form})
 
 
 def enter(request):
+    message = ''
     if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            user = form.login()
-            if user is not None:
-                login(request, user)
-                return HttpResponseRedirect(reverse('index'))
-    else:
-        form = LoginForm()
-    return render(request, 'login.html', {'form': form})
+        username = request.POST.get('username','')
+        password = request.POST.get('password','')
+        user = authenticate(
+                username=username,
+                password=password
+        )
+        if user is not None:
+             login(request, user)
+             return HttpResponseRedirect(reverse('index'))
+        else:
+            message = u'Check you type your login and password correctly'
+    return render(request, 'login.html', {'error': message})

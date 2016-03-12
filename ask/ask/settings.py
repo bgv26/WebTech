@@ -95,3 +95,7 @@ TEMPLATE_DIRS = (
 
 # SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
+#Authentication backends
+# AUTHENTICATION_BACKENDS = (
+#     'django.contrib.auth.backends.ModelBackend',
+# )
