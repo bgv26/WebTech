@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_GET, require_POST
-from django.contrib.auth import authenticate, login
+from django.contrib import auth
 from models import Question
 from forms import AskForm, AnswerForm, SignUpForm
 
@@ -87,30 +87,31 @@ def signup(request):
         password = request.POST['password']
         form = SignUpForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            user = authenticate(
-                username=username,
-                password=password
-            )
-            if user is not None:
-                login(request, user)
-                return HttpResponseRedirect(reverse('index'))
+            form.save()
+            login(request)
+            # user = auth.authenticate(
+            #     username=username,
+            #     password=password
+            # )
+            # if user is not None:
+            #     auth.login(request, user)
+            #     return HttpResponseRedirect(reverse('index'))
     else:
         form = SignUpForm()
     return render(request, 'signup.html', {'form': form})
 
 
-def enter(request):
+def login(request):
     message = ''
     if request.method == 'POST':
         username = request.POST.get('username','')
         password = request.POST.get('password','')
-        user = authenticate(
+        user = auth.authenticate(
                 username=username,
                 password=password
         )
         if user is not None:
-             login(request, user)
+             auth.login(request, user)
              return HttpResponseRedirect(reverse('index'))
         else:
             message = u'Check you type your login and password correctly'
