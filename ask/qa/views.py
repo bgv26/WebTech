@@ -83,21 +83,21 @@ def answer(request, quest):
 
 def signup(request):
     if request.method == 'POST':
-        # username = request.POST['username']
-        # password = request.POST['password']
         form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
-            needs_login = login(request)
-            if needs_login:
-                return needs_login
-            # user = auth.authenticate(
-            #     username=username,
-            #     password=password
-            # )
-            # if user is not None:
-            #     auth.login(request, user)
-            #     return HttpResponseRedirect(reverse('index'))
+            # needs_login = login(request)
+            # if needs_login:
+            #     return needs_login
+            username = request.POST['username']
+            password = request.POST['password']
+            user = auth.authenticate(
+                username=username,
+                password=password
+            )
+            if user is not None:
+                auth.login(request, user)
+                return HttpResponseRedirect(reverse('index'))
     else:
         form = SignUpForm()
     return render(request, 'signup.html', {'form': form})
