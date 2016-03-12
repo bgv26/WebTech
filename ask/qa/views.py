@@ -83,12 +83,14 @@ def answer(request, quest):
 
 def signup(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+        # username = request.POST['username']
+        # password = request.POST['password']
         form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
-            login(request)
+            needs_login = login(request)
+            if needs_login:
+                return needs_login
             # user = auth.authenticate(
             #     username=username,
             #     password=password
