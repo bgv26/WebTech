@@ -111,8 +111,8 @@ def login(request):
                 password=password
         )
         if user is not None:
-             auth.login(request, user)
-             return HttpResponseRedirect(reverse('index'))
+            auth.login(request, user)
+            return HttpResponseRedirect(reverse('index'))
         else:
             message = u'Check you type your login and password correctly'
     return render(request, 'login.html', {'error': message})
